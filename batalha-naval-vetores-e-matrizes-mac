@@ -1,0 +1,66 @@
+# Trabalho: Vetores e Matrizes - Batalha Naval
+# Feito por: [Marcos]
+
+import random
+
+# cria o tabuleiro vazio
+def criar_tabuleiro(tamanho):
+    return [["~" for _ in range(tamanho)] for _ in range(tamanho)]
+
+# mostra o tabuleiro na tela
+def mostrar_tabuleiro(tabuleiro):
+    print("  A B C D E")
+    for i, linha in enumerate(tabuleiro):
+        print(f"{i+1} " + " ".join(linha))
+    print()
+
+# coloca os navios aleatoriamente
+def colocar_navios(tabuleiro, qtd):
+    for _ in range(qtd):
+        while True:
+            l = random.randint(0, 4)
+            c = random.randint(0, 4)
+            if tabuleiro[l][c] == "~":
+                tabuleiro[l][c] = "N"
+                break
+
+# jogo principal
+def jogar():
+    tamanho = 5
+    navios = 3
+    tabuleiro = criar_tabuleiro(tamanho)
+    colocar_navios(tabuleiro, navios)
+
+    acertos = 0
+    tentativas = 0
+
+    print("=== BATALHA NAVAL ===")
+    print("Tente acertar os 3 navios!\n")
+
+    while acertos < navios:
+        mostrar_tabuleiro(tabuleiro)
+        jogada = input("Digite uma posição (ex: A3): ").upper()
+
+        if len(jogada) != 2 or jogada[0] not in "ABCDE" or not jogada[1].isdigit():
+            print("Coordenada inválida!\n")
+            continue
+
+        linha = int(jogada[1]) - 1
+        coluna = "ABCDE".index(jogada[0])
+
+        if tabuleiro[linha][coluna] == "N":
+            print("Acertou um navio!\n")
+            tabuleiro[linha][coluna] = "X"
+            acertos += 1
+        elif tabuleiro[linha][coluna] == "~":
+            print("Errou! Foi na água.\n")
+            tabuleiro[linha][coluna] = "O"
+        else:
+            print("Você já tentou aí!\n")
+
+        tentativas += 1
+
+    print(f"Parabéns! Você venceu com {tentativas} tentativas!")
+
+if __name__ == "__main__":
+    jogar()
